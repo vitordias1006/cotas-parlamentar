@@ -1,6 +1,5 @@
 package br.com.indicecotabasica.cotasparlamentar.dtos;
 
-import br.com.indicecotabasica.cotasparlamentar.model.HistoricoIndice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

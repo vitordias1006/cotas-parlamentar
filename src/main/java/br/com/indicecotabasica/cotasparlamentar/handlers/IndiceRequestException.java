@@ -1,4 +1,4 @@
-package br.com.indicecotabasica.cotasparlamentar.handler;
+package br.com.indicecotabasica.cotasparlamentar.handlers;
 
 public class IndiceRequestException extends RuntimeException {
     public IndiceRequestException(String message) {

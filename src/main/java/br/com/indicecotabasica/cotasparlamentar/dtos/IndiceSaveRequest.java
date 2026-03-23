@@ -3,6 +3,7 @@ package br.com.indicecotabasica.cotasparlamentar.dtos;
 import br.com.indicecotabasica.cotasparlamentar.enums.StatusCota;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ public class IndiceSaveRequest {
     @Max(value = 10000, message = "O valor maximo deve ser 10000")
     private Double valor;
 
-    @NotNull(message = "Nome deve ser preenchido")
+    @NotBlank(message = "Nome deve ser preenchido")
     private String nome;
 
     @NotNull(message = "Data deve ser preenchida")

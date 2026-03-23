@@ -1,11 +1,8 @@
-package br.com.indicecotabasica.cotasparlamentar.model;
+package br.com.indicecotabasica.cotasparlamentar.models;
 
-import br.com.indicecotabasica.cotasparlamentar.enums.StatusCota;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 
 @Entity
@@ -25,5 +22,5 @@ public class Indice {
     private Double valor;
 
     @OneToMany(mappedBy = "indice")
-    private List<HistoricoIndice> historicoIndice;
+    private List<HistoricoIndiceCotaBasica> historicoIndiceCotaBasica;
 }

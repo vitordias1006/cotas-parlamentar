@@ -2,15 +2,15 @@ package br.com.indicecotabasica.cotasparlamentar.mappers;
 
 import br.com.indicecotabasica.cotasparlamentar.dtos.HistoricoIndiceResponse;
 import br.com.indicecotabasica.cotasparlamentar.dtos.IndiceComHistoricoResponse;
-import br.com.indicecotabasica.cotasparlamentar.model.HistoricoIndice;
-import br.com.indicecotabasica.cotasparlamentar.model.Indice;
+import br.com.indicecotabasica.cotasparlamentar.models.HistoricoIndiceCotaBasica;
+import br.com.indicecotabasica.cotasparlamentar.models.Indice;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class IndiceMapper {
-    public IndiceComHistoricoResponse toResponse(Indice indice, List<HistoricoIndice> historicos) {
+    public IndiceComHistoricoResponse toResponse(Indice indice, List<HistoricoIndiceCotaBasica> historicos) {
         return IndiceComHistoricoResponse.builder()
                 .id(indice.getId())
                 .nome(indice.getNome())
@@ -19,7 +19,7 @@ public class IndiceMapper {
                 .build();
     }
 
-    private HistoricoIndiceResponse toHistoricoResponse(HistoricoIndice h) {
+    private HistoricoIndiceResponse toHistoricoResponse(HistoricoIndiceCotaBasica h) {
         return HistoricoIndiceResponse.builder()
                 .id(h.getId())
                 .dataInicio(h.getDataInicio())

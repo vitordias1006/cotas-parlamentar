@@ -2,14 +2,14 @@ package br.com.indicecotabasica.cotasparlamentar.services;
 
 import br.com.indicecotabasica.cotasparlamentar.dtos.*;
 import br.com.indicecotabasica.cotasparlamentar.enums.StatusCota;
-import br.com.indicecotabasica.cotasparlamentar.handler.DateAndValueOcuppiedException;
-import br.com.indicecotabasica.cotasparlamentar.handler.IndiceDateRequestException;
-import br.com.indicecotabasica.cotasparlamentar.handler.ResourceNotFoundException;
+import br.com.indicecotabasica.cotasparlamentar.handlers.DateAndValueOcuppiedException;
+import br.com.indicecotabasica.cotasparlamentar.handlers.InvalidDateRequestException;
+import br.com.indicecotabasica.cotasparlamentar.handlers.ResourceNotFoundException;
 import br.com.indicecotabasica.cotasparlamentar.mappers.IndiceMapper;
-import br.com.indicecotabasica.cotasparlamentar.model.HistoricoIndice;
-import br.com.indicecotabasica.cotasparlamentar.model.Indice;
-import br.com.indicecotabasica.cotasparlamentar.repositories.HistoricoIndiceRepository;
-import br.com.indicecotabasica.cotasparlamentar.repositories.IndiceRepository;
+import br.com.indicecotabasica.cotasparlamentar.models.HistoricoIndiceCotaBasica;
+import br.com.indicecotabasica.cotasparlamentar.models.Indice;
+import br.com.indicecotabasica.cotasparlamentar.repositories.HistoricoIndiceCotaBasicaRepository;
+import br.com.indicecotabasica.cotasparlamentar.repositories.IndiceCotaBasicaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,13 @@ public class IndiceService {
     @Autowired
     private IndiceMapper indiceMapper;
 
-    private final IndiceRepository indiceRepository;
+    private final IndiceCotaBasicaRepository indiceCotaBasicaRepository;
 
-    private final HistoricoIndiceRepository historicoIndiceRepository;
+    private final HistoricoIndiceCotaBasicaRepository historicoIndiceCotaBasicaRepository;
 
     public IndiceResponse save(IndiceSaveRequest indiceRequest) {
 
-        if (historicoIndiceRepository.existsByValorAndDataInicio(indiceRequest.getValor(), indiceRequest.getDataInicio())) {
+        if (historicoIndiceCotaBasicaRepository.existsByValorAndDataInicio(indiceRequest.getValor(), indiceRequest.getDataInicio())) {
             throw new DateAndValueOcuppiedException("Esse valor já existe para a data informada");
         }
         Indice indice = Indice.builder()
@@ -39,15 +39,15 @@ public class IndiceService {
                 .valor(indiceRequest.getValor())
                 .build();
         indiceRequest.setStatus(StatusCota.EM_ESPERA);
-        indiceRepository.save(indice);
+        indiceCotaBasicaRepository.save(indice);
 
-        HistoricoIndice historicoIndice = HistoricoIndice.builder()
+        HistoricoIndiceCotaBasica historicoIndiceCotaBasica = HistoricoIndiceCotaBasica.builder()
                 .valor(indiceRequest.getValor())
                 .dataInicio(indiceRequest.getDataInicio())
                 .indice(indice)
                 .status(indiceRequest.getStatus())
                 .build();
-        historicoIndiceRepository.save(historicoIndice);
+        historicoIndiceCotaBasicaRepository.save(historicoIndiceCotaBasica);
 
         return IndiceResponse.builder()
                 .id(indice.getId())
@@ -59,15 +59,15 @@ public class IndiceService {
 
     public List<IndiceComHistoricoResponse> consultar(LocalDate dataInicio, LocalDate dataFim) {
         if (!dataInicio.isBefore(dataFim)) {
-            throw new IndiceDateRequestException("A data de inicio deve ser antes da data fim");
+            throw new InvalidDateRequestException("A data de inicio deve ser antes da data fim");
         }
 
-        List<HistoricoIndice> historicos = historicoIndiceRepository
+        List<HistoricoIndiceCotaBasica> historicos = historicoIndiceCotaBasicaRepository
                 .findByDataInicioBetweenOrderByDataInicioDesc(dataInicio, dataFim);
 
 
         return  historicos.stream()
-                .collect(Collectors.groupingBy(HistoricoIndice::getIndice))
+                .collect(Collectors.groupingBy(HistoricoIndiceCotaBasica::getIndice))
                 .entrySet().stream()
                 .map(entry -> indiceMapper.toResponse(entry.getKey(), entry.getValue()))
                 .toList();
@@ -75,10 +75,10 @@ public class IndiceService {
 
     public IndiceResponse atualizarIndice(Long id, IndiceUpdateRequest request) {
 
-        Indice indice = indiceRepository.findById(id)
+        Indice indice = indiceCotaBasicaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Índice não encontrado"));
 
-        indiceRepository.save(indice);
+        indiceCotaBasicaRepository.save(indice);
 
         IndiceResponse indiceResponse =  IndiceResponse.builder()
                 .id(indice.getId())
@@ -88,7 +88,7 @@ public class IndiceService {
                 .dataFim(request.getDataFim())
                 .build();
 
-        HistoricoIndice historico = HistoricoIndice.builder()
+        HistoricoIndiceCotaBasica historico = HistoricoIndiceCotaBasica.builder()
                 .valor(request.getValor())
                 .dataInicio(request.getDataInicio())
                 .dataFim(request.getDataFim())
@@ -96,18 +96,18 @@ public class IndiceService {
                 .indice(indice)
                 .build();
 
-        historicoIndiceRepository.save(historico);
+        historicoIndiceCotaBasicaRepository.save(historico);
 
         return indiceResponse;
     }
 
     public IndiceComHistoricoResponse buscarIndiceComHistorico(Long id) {
 
-        Indice indice = indiceRepository.findById(id)
+        Indice indice = indiceCotaBasicaRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Índice não encontrado"));
 
-        List<HistoricoIndice> historicos = historicoIndiceRepository.findByIndiceIdOrderByDataInicioDesc(id);
+        List<HistoricoIndiceCotaBasica> historicos = historicoIndiceCotaBasicaRepository.findByIndiceIdOrderByDataInicioDesc(id);
 
         return indiceMapper.toResponse(indice, historicos);
     }

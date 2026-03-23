@@ -1,4 +1,4 @@
-package br.com.indicecotabasica.cotasparlamentar.model;
+package br.com.indicecotabasica.cotasparlamentar.models;
 
 import br.com.indicecotabasica.cotasparlamentar.enums.StatusCota;
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class HistoricoIndice {
+public class HistoricoIndiceCotaBasica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
