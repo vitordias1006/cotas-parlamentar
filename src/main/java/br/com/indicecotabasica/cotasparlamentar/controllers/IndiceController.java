@@ -3,7 +3,6 @@ package br.com.indicecotabasica.cotasparlamentar.controllers;
 import br.com.indicecotabasica.cotasparlamentar.dtos.*;
 import br.com.indicecotabasica.cotasparlamentar.services.IndiceService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/indices")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class IndiceController {
 
     private final IndiceService indiceService;

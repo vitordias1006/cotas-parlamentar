@@ -5,6 +5,7 @@ import br.com.indicecotabasica.cotasparlamentar.dtos.CotaBasicaSaveRequest;
 import br.com.indicecotabasica.cotasparlamentar.services.CotaBasicaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("cotas")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CotaBasicaController {
 
     private final CotaBasicaService cotaBasicaService;
