@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CotaBasicaController {
 
-    private CotaBasicaService cotaBasicaService;
+    private final CotaBasicaService cotaBasicaService;
 
     @PostMapping
     public ResponseEntity<CotaBasicaResponse> save(@Valid @RequestBody CotaBasicaSaveRequest request) {

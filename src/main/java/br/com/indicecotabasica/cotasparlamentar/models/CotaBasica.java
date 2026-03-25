@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 
 @Entity
 @Data
